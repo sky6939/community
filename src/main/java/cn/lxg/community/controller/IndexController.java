@@ -1,4 +1,4 @@
-package cn.lxg.community.community.controller;
+package cn.lxg.community.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

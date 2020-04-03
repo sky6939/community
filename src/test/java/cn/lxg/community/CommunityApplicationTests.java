@@ -1,4 +1,4 @@
-package cn.lxg.community.community;
+package cn.lxg.community;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
