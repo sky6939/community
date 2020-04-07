@@ -3,6 +3,7 @@ import	java.net.Authenticator;
 
 import cn.lxg.community.mapper.UserMapper;
 import cn.lxg.community.model.User;
+import cn.lxg.community.utils.CookieUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,14 +19,11 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals("token")) {
-                User user = userMapper.selectOneByToken(cookie.getValue());
-                if(user != null) {
-                    request.getSession().setAttribute("user",user);
-                }
-                break;
+        String token = CookieUtil.getCookie(request.getCookies(), "token");
+        if(token != null) {
+            User user = userMapper.selectOneByToken(token);
+            if(user != null) {
+                request.getSession().setAttribute("user",user);
             }
         }
         return "index";

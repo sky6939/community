@@ -51,24 +51,23 @@
 <div class="row">
     <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
         <h3><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h3>
-        <form action="">
+        <form action="/publish" method = "post" id = "question">
             <div class="form-group">
                 <label for="title">问题标题（简单扼要）:</label>
-                <input type="text" class="form-control" id="title" placeholder="问题标题">
+                <input type="text" class="form-control" name = "title" id="title" placeholder="问题标题">
             </div>
             <div class="form-group">
-                <label for="supplement">问题补充 (必填，请参照右侧提示):</label>
-                <textarea class="form-control" rows="20" id = "supplement" ></textarea>
+                <label for="description">问题补充 (必填，请参照右侧提示):</label>
+                <textarea class="form-control" rows="20" name = "description" id = "description" ></textarea>
             </div>
             <div class="form-group">
-                <label for="addLabel">添加标签：</label>
-                <input type="text" class="form-control" id="addLabel" placeholder="输入标签以,号分隔">
+                <label for="tag">添加标签：</label>
+                <input type="text" class="form-control" name="tag" id="tag" placeholder="输入标签以,号分隔">
             </div>
             <div class="btn-toolbar" role="toolbar">
-                <div type="button" class="btn btn-default" style = "background: rgb(62,145,62); float:right; margin-bottom: 30px;">发布</div>
+                <div class="alert alert-danger questionMsg"></div><div class="alert alert-danger" th:if="${error} ne null" th:text="${error}"></div><button type="submit" class="btn btn-default" style = "background: rgb(62,145,62); float:right; margin-bottom: 30px;">发布</button>
             </div>
         </form>
-
     </div>
     <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
         <div class="panel panel-success">
@@ -94,6 +93,6 @@
         </div>
     </div>
 </div>
-
+<script src = "js/question.js"></script>
 </body>
 </html>

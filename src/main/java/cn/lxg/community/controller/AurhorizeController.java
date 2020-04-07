@@ -53,9 +53,11 @@ public class AurhorizeController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             userMapper.insertUser(user);
-            response.addCookie(new Cookie("token",token));
-//            request.getSession().setAttribute("user",user);
+            Cookie cookie = new Cookie("token", token);
+            cookie.setMaxAge(1000*60*60*24*30);
+            response.addCookie(cookie);
         }
         return "redirect:/";
     }
