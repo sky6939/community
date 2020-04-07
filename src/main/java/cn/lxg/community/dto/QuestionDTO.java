@@ -1,34 +1,31 @@
-package cn.lxg.community.model;
+package cn.lxg.community.dto;
 
+import cn.lxg.community.model.User;
 import lombok.Data;
 
-import java.io.Serializable;
-
-/**
- * (Question)实体类
- */
 @Data
-public class Question {
+public class QuestionDTO {
 
     private Integer id;
-    
+
     private String title;
-    
+
     private String description;
-    
+
     private Long gmtCreate;
-    
+
     private Long gmtModified;
-    
+
     private Integer creator;
-    
+
     private Integer commentCount;
-    
+
     private Integer viewCount;
-    
+
     private Integer likeCount;
-    
+
     private String tag;
 
+    private User user;
 
 }
