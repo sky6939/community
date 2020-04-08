@@ -1,5 +1,6 @@
 package cn.lxg.community.service;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import cn.lxg.community.dto.PageDTO;
 import cn.lxg.community.dto.QuestionDTO;
 import cn.lxg.community.mapper.QuestionMapper;
@@ -25,6 +26,13 @@ public class QuestService {
     private QuestionMapper questionMapper;
 
     public PageDTO findAll(Integer currPage, Integer size) {
+        int totalCount = questionMapper.findCount();
+        int totalPage = totalCount % size == 0 ? totalCount/size: totalCount/size+1;
+        if(currPage > totalPage) {
+            currPage = totalPage;
+        } else if(currPage < 1) {
+            currPage = 1;
+        }
         List<QuestionDTO> questionDTOs = new ArrayList<>();
         //查询出所有的问题，然后根据问题，查找到是谁发布的
         List<Question> questions = questionMapper.findAll((currPage-1)*size, size);
@@ -38,7 +46,7 @@ public class QuestService {
         }
         PageDTO pageDTO = new PageDTO();
         pageDTO.setQuestions(questionDTOs);
-        pageDTO.setData(currPage, size, questionMapper.findCount());
+        pageDTO.setData(currPage, size, totalCount);
         return pageDTO;
     }
 
