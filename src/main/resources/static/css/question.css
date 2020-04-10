@@ -1,0 +1,12 @@
+#quest_descript {
+    color: #999;
+    font-size: 12px;
+}
+.creator {
+    cursor: pointer;
+    color: blue;
+}
+.edit {
+    color: #999;
+    font-size: 12px;
+}

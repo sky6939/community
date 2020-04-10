@@ -2,18 +2,21 @@ package cn.lxg.community.controller;
 
 import cn.lxg.community.dto.AccessTokenDTO;
 import cn.lxg.community.dto.GithubUser;
-import cn.lxg.community.mapper.UserMapper;
 import cn.lxg.community.model.User;
 import cn.lxg.community.provider.GithubProvider;
+import cn.lxg.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -30,7 +33,7 @@ public class AurhorizeController {
     private String redirect_uri;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @RequestMapping("/callback")
     public String callback(@RequestParam(name = "code")String code,
@@ -54,11 +57,23 @@ public class AurhorizeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(githubUser.getAvatarUrl());
-            userMapper.insertUser(user);
+            /*userMapper.insertUser(user);*/
+            userService.createOrUpdate(user);
             Cookie cookie = new Cookie("token", token);
             cookie.setMaxAge(1000*60*60*24*30);
             response.addCookie(cookie);
         }
+        return "redirect:/";
+    }
+
+    @GetMapping("/loginOut")
+    public String loginOut(HttpServletRequest req,HttpServletResponse resp) {
+//        清除session
+        req.getSession().invalidate();
+//        清除cookie
+        Cookie cookie = new Cookie("token",null);
+        cookie.setMaxAge(0);
+        resp.addCookie(cookie);
         return "redirect:/";
     }
 

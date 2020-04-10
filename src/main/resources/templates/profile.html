@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title  th:text="${activeName}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css" />
+
+    <script src="/js/jquery-1.12.4.js" type="application/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<div th:insert="~{navgation :: nav}"></div>
+<div class="row">
+    <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <h3><span th:text="${activeName}"></span></h3>
+        <hr>
+        <div th:if="${active} eq 'questions'">
+            <div class="media"  th:each="question : ${page.getQuestions()}">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object" th:src="${question.getUser().getAvatarUrl()}" src="" th:alt = "${question.getUser().getName()}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading"><a href="#" th:href="@{'/question/'+${question.getId()}}" th:text="${question.getTitle()}"></a></h4>
+                    <div>
+                        <span th:text="${question.getUser().getName()}"></span> 发起了问题 •<span th:text="${ question.getCommentCount()}"></span> 个回复 •<span th:text="${question.getViewCount()}"></span> 次浏览 •<span th:text="${#dates.format(question.getGmtCreate(),'yyyy-MM-dd HH:mm ')}"></span>
+                    </div>
+                </div>
+            </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li th:if="${page.getCurrPage()} gt 3">
+                        <a href="#" aria-label="Previous" th:href="@{'/profile/'+${active}(currPage=${1})}">
+                            <span aria-hidden="true">首页</span>
+                        </a>
+                    </li>
+                    <li th:if="${page.getCurrPage()} gt 1">
+                        <a href="#" aria-label="Previous" th:href="@{'/profile/'+${active}(currPage=${page.getCurrPage()-1})}">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li th:each="pageNumber : ${page.getList()}" th:class="${pageNumber == page.getCurrPage() ? 'active' :''}"><a th:href="@{'/profile/'+${active}(currPage=${pageNumber})}" th:text="${pageNumber}"></a></li>
+                    <li th:if="${page.getCurrPage()} lt ${page.getTotalPage()} ">
+                        <a href="#" aria-label="Next" th:href="@{'/profile/'+${active}(currPage=${page.getCurrPage()+1})}">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li th:if="${page.getCurrPage()} lt ${page.getTotalPage() - 2} ">
+                        <a href="#" aria-label="Previous" th:href="@{'/profile/'+${active}(currPage=${page.getTotalPage()})}">
+                            <span aria-hidden="true">尾页</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class = "col-lg-3 col-md-12 col-sm-12 col-xs-12">
+        <div class="list-group" id = "list_info">
+            <a href="/profile/questions" th:class="${active} eq 'questions' ? 'active list-group-item':'list-group-item'">
+                我的问题
+            </a>
+            <a href="/profile/reply" th:class="${active} eq 'reply' ? 'active list-group-item':'list-group-item'">最新回复<span class="badge">4</span></a>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="/css/publish.css" />
+<link rel="stylesheet" href="/css/index.css" />
+<script src = "/js/question.js"></script>
+</body>
+</html>

@@ -1,31 +1,32 @@
 package cn.lxg.community.controller;
-import	java.net.Authenticator;
-import java.net.SocketTimeoutException;
-import java.util.List;
 
 import cn.lxg.community.dto.PageDTO;
-import cn.lxg.community.dto.QuestionDTO;
 import cn.lxg.community.mapper.UserMapper;
-import cn.lxg.community.model.User;
-import cn.lxg.community.service.QuestService;
-import cn.lxg.community.utils.CookieUtil;
+import cn.lxg.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class IndexController {
 
     @Autowired
-    private UserMapper userMapper;
+    private QuestionService questionService;
 
-    @Autowired
-    private QuestService questService;
+    @GetMapping("/{msg}")
+    public String error(HttpServletRequest request,
+                        Model model,
+                        @RequestParam(name = "currPage", defaultValue = "1")Integer currPage,
+                        @RequestParam(name = "size",defaultValue = "5")Integer size
+    ) {
+
+        return "index";
+    }
 
     @GetMapping("/")
     public String index(HttpServletRequest request,
@@ -33,14 +34,7 @@ public class IndexController {
                         @RequestParam(name = "currPage", defaultValue = "1")Integer currPage,
                         @RequestParam(name = "size",defaultValue = "5")Integer size
                         ) {
-        String token = CookieUtil.getCookie(request.getCookies(), "token");
-        if(token != null) {
-            User user = userMapper.selectOneByToken(token);
-            if(user != null) {
-                request.getSession().setAttribute("user",user);
-            }
-        }
-        PageDTO pageDTO = questService.findAll(currPage, size);
+        PageDTO pageDTO = questionService.findAll(currPage, size);
         model.addAttribute("page",pageDTO);
         return "index";
     }
